@@ -4,8 +4,8 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 
-import mine.util.Tools;
 import mine.util.io.DB4Repost;
 import mine.weibo.global.AccessTokenAndKey;
 import mine.weibo.global.Global;
@@ -119,7 +119,7 @@ public class RepostStatus implements Runnable {
 			case 2:
 				List<Trends> trendsDaily = weibo.getTrendsDaily(0);
 				Trend[] ts = trendsDaily.get(0).getTrends();
-				int n = Tools.myrand(0, ts.length);
+				int n = myrand(0, ts.length);
 				Trend t = ts[n];
 				String hotword = t.getQuery();
 				statuses = weibo.getTrendStatus(hotword, paging);
@@ -221,8 +221,8 @@ public class RepostStatus implements Runnable {
 			hour = c.get(Calendar.HOUR_OF_DAY);
 			int interval1 = 0, interval2 = 0;
 			if (hour >= 9 && hour < 23) {
-				interval1 = Tools.myrand(5, 15);
-				interval2 = Tools.myrand(5, 15);
+				interval1 = myrand(5, 15);
+				interval2 = myrand(5, 15);
 				repostStatus("热点", 2);
 				sleep(interval1);
 				unFollowOthers(15, 100, 40);
@@ -240,6 +240,11 @@ public class RepostStatus implements Runnable {
 			}
 			Global.gout.println("\n\n\t\t\t\t\tcycle    " + c.getTime().toString());
 		}
+	}
+	
+	public static int myrand(int small,int big){
+		Random rand = new Random();
+		return rand.nextInt(big-small)+small;
 	}
 
 	public static void main(String[] args) {
